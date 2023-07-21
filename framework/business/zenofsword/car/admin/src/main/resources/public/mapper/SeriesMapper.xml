@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="course.linkflower.link.oneframework.car.dao.SeriesMapper">
+    <insert id="add" parameterType="course.linkflower.link.oneframework.model.Series" useGeneratedKeys="true" keyProperty="id">
+        insert into series (name, brand_id, ordering, company_id)
+        values(#{name},#{brandId},#{ordering},#{companyId})
+    </insert>
+
+    <update id="update">
+        update series
+        <set>
+            <if test="name!=null and name!=''">name=#{name}</if>
+            <if test="ordering!=null and ordering!=''">ordering=#{ordering}</if>
+            <if test="companyId!=null and companyId!=''">company_id=#{companyId}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="deleteById">
+        delete from series where id=#{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        delete from series where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getById" resultType="course.linkflower.link.oneframework.model.Series">
+        select * from series where id=#{id}
+    </select>
+
+    <select id="countName" resultType="int">
+        select count(*) from series where car_pattern_id=#{carPatternId}
+    </select>
+
+    <select id="countCarPatternIdDiffId" resultType="int">
+        select count(*) from series where car_pattern_id=#{carPatternId} and id!=#{id}
+    </select>
+
+    <select id="countAll" resultType="int">
+        select count(*) from series where id in
+        <foreach collection="companyIds" separator="," close=")" open="(" item="companyId">
+            #{companyId}
+        </foreach>
+    </select>
+
+    <select id="listByPatternIds" resultType="course.linkflower.link.oneframework.model.Series">
+        select * from series where car_pattern_id in
+        <foreach collection="companyIds" item="companyId" open="(" close=")" separator=",">
+            #{companyId}
+        </foreach>
+    </select>
+    
+    <select id="lastCountByBrandId" resultType="Integer">
+        select count(*) from series where brand_id=#{brandId}
+    </select>
+</mapper>

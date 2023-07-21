@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.oneframework.house.dao.RentHouseRequestMapper">
+    <insert id="saves" >
+        insert into rent_house_request (`rent_house_info_id`,`rent_house_request_info_id`) values
+        <foreach item="item" collection="array" separator=",">
+            (#{id},#{item})
+        </foreach>
+    </insert>
+    <delete id="deletes">
+        delete from house_device where rent_house_info_id=#{id}
+    </delete>
+</mapper>

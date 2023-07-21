@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.oneframework.house.dao.AreaProductDetailsMapper">
+    <select id="getById" resultType="course.linkflower.link.oneframework.house.model.AreaProductDetails">
+        select * from area_product_details where id=#{id}
+    </select>
+
+    <insert id="save" parameterType="course.linkflower.link.oneframework.house.model.AreaProductDetails" useGeneratedKeys="true" keyProperty="id">
+        insert into area_product_details (target_id, area_info_id,target_type,area_type,area_level)
+        values(#{targetId},#{areaInfoId},#{targetType},#{areaType},#{areaLevel})
+    </insert>
+
+    <delete id="delete">
+        delete from area_product_details where id=#{id}
+    </delete>
+    <update id="update" parameterType="course.linkflower.link.oneframework.house.model.AreaProductDetails" useGeneratedKeys="true">
+        update area_product_details set `target_id`=#{targetId},`area_info_id` = #{areaInfoId},`target_type`=#{targetType},
+        `area_type` = #{areaType} ,`area_level` = #{areaLevel} where id = #{id};
+    </update>
+    <update id="updates" parameterType="course.linkflower.link.oneframework.house.model.AreaProductDetails" useGeneratedKeys="true">
+        <foreach collection="list" item="item" >
+            update area_product_details set target_id =#{item.targetId},area_info_id = #{item.areaInfoId},target_type=#{item.targetType},
+            area_type = #{item.areaType} ,area_level = #{item.areaLevel} where id = #{item.id};
+        </foreach>
+    </update>
+    <select id="countByAreaTargetType" resultType="int" parameterType="course.linkflower.link.oneframework.house.model.AreaProductDetails">
+        select count(*) from area_product_details where `target_id` = #{targetId}  and `area_info_id` = #{areaInfoId} and `target_type` = #{targetType}
+    </select>
+    <insert id="saves" >
+        insert into area_product_details (`target_id`,`area_info_id`) values
+        <foreach item="item" collection="array" separator=",">
+            (#{id},#{item})
+        </foreach>
+    </insert>
+    <delete id="deletes">
+        delete from area_product_details where target_id = #{id}
+    </delete>
+    <select id="listByIds" resultType="course.linkflower.link.oneframework.house.model.AreaProductDetails">
+        select * from area_product_details where area_info_id in
+        <foreach item="item" collection="ids" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

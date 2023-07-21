@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="course.linkflower.link.oneframework.car.dao.UsedCarMapper">
+    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="course.linkflower.link.oneframework.model.Company">
+        insert into used_car(car_infor_id, account_id, post_date, building_id, license_date, contacted_name, contacted_phone, status,
+        photo_count, nature_key, insurance_date, annual_inspection_date, maintenance_key, compulsory_insurance_date, vin, description,
+        transfer_fee_key, anxuan_key, price, mileage)
+        values(#{carInforId},#{accountId},#{postDate},#{buildingId},#{licenseDate},#{contactedName},#{contactedPhone},#{status},
+        #{photoCount},#{natureKey},#{insuranceDate},#{aunnualInspectionDate},#{maintenanceKey},#{compulsoryInsuranceDate},#{vin},
+        #{description},#{transferFeeKey},#{anxuanKey},#{price}, #{mileage})
+    </insert>
+
+    <delete id="deleteById">
+        delete from used_car where id=#{id}
+    </delete>
+
+    <delete id="deleteById">
+        delete from used_car where id in
+        <foreach collection="ids" separator="," close=")" open="(" item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update used_car
+        <set>
+            <if test="carInforId!=null">car_infor_id=#{carInforId},</if>
+            <if test="accountId!=null">account_id=#{accountId},</if>
+            <if test="postDate!=null">post_date=#{postDate},</if>
+            <if test="buildingId!=null">building_id=#{buildingId},</if>
+            <if test="licenseDate!=null">license_date=#{licenseDate},</if>
+            <if test="contactedName!=null">contacted_name=#{contactedName},</if>
+            <if test="contactedPhone!=null">contacted_phone=#{contactedPhone},</if>
+            <if test="status!=null">status=#{status},</if>
+            <if test="photoCount!=null">photo_count=#{photoCount}, </if>
+            <if test="natureKey!=null">nature_key=#{natureKey},</if>
+            <if test="insuranceDate!=null">insurance_date=#{insuranceDate},</if>
+            <if test="aunnualInspectionDate!=null">annual_inspection_date=#{aunnualInspectionDate},</if>
+            <if test="vin!=null">vin=#{vin},</if>
+            <if test="description!=null">description=#{description},</if>
+            <if test="transferFeeKey!=null">transfer_fee_key=#{transferFeeKey},</if>
+            <if test="anxuanKey!=null">anxuan_key=#{anxuanKey},</if>
+            <if test="price!=null">price=#{price},</if>
+            <if test="mileage!=null"> mileage=#{mileage}</if>
+        </set>
+    </update>
+
+    <select id="getUsedCarById" resultType="course.linkflower.link.oneframework.car.vo.usedcar.UsedCarVo">
+        select * from used_car where id=#{id}
+    </select>
+
+    <select id="listUsedCarByPostDate" resultType="course.linkflower.link.oneframework.car.vo.usedcar.UsedCarVo">
+        select * from used_car where post_date=#{postDate} limit #{DefaultMaxCountLimit}
+    </select>
+    
+    <select id="search" resultType="course.linkflower.link.oneframework.car.vo.usedcar.UsedCarVo">
+        select * from used_car order by id limit #{startCount}, #{pageSize}
+    </select>
+
+    <select id="countAll" resultType="long">
+        select count(*) from used_car
+    </select>
+</mapper>

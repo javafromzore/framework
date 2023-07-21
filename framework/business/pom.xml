@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>course.linkflower.link</groupId>
+        <artifactId>one-framework</artifactId>
+        <version>1.1.0</version>
+    </parent>
+    <version>1.0.0</version>
+    <artifactId>business</artifactId>
+    <description>业务中心</description>
+    <packaging>pom</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus</artifactId>
+            <version>3.4.0</version>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+    <modules>
+        <module>zenofsword</module>
+    </modules>
+</project>

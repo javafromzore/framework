@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.system.dao.PrivilegeGroupMapper">
+    <select id="countCode" resultType="int">
+        select count(*) from privilege_group where `code`=#{code} limit 1
+    </select>
+
+    <select id="countLast" resultType="Integer">
+        select ordering from privilege_group where type=#{type} order by ordering desc limit 1
+    </select>
+
+    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="course.linkflower.link.system.model.UserGroup">
+        insert into privilege_group(name, type, code, ordering)
+        values(#{name},#{type},#{code},#{ordering})
+    </insert>
+
+    <select id="getOne" resultType="course.linkflower.link.system.model.UserGroup">
+        select * from privilege_group where id=#{id} limit 1
+    </select>
+
+    <delete id="deleteAllById">
+        delete pg.*, rpg.*, ppg.* from privilege_group pg
+        left join role_privilege_group rpg on pg.id=rpg.privi_group_id
+        left join privilege_privilege_group ppg on pg.id=ppg.privi_group_id
+        where pg.id=#{id}
+    </delete>
+
+    <delete id="deleteAllByIds">
+        delete pg.*, rpg.*, ppg.* from privilege_group pg
+        left join role_privilege_group rpg on pg.id=rpg.privi_group_id
+        left join privilege_privilege_group ppg on pg.id=ppg.privi_group_id
+        where pg.id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update privilege_group
+        <set>
+            <if test="name!=null and name!=''">name=#{name}</if>
+            <if test="code and code!=''">code=#{code}</if>
+            <if test="ordering and ordering!=''">ordering=#{ordering}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="search" resultType="course.linkflower.link.system.vo.usergroup.UserGroupVo">
+        select * from privilege_group
+        <trim prefix="where">
+            type=#{type}
+            <if test="searchKey and searchKey!=''">and (name like '%${searchKey}%' or code like '%${searchKey}%')</if>
+        </trim>
+        order by ordering desc
+        limit #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countTotal" resultType="int">
+        select * from privilege_group
+        <trim prefix="where">
+            type=#{type}
+            <if test="searchKey and searchKey!=''">and (name like '%${searchKey}%' or code like '%${searchKey}%')</if>
+        </trim>
+    </select>
+</mapper>

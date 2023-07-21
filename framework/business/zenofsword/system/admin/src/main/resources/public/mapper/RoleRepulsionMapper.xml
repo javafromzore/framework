@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.system.dao.RoleRepulsionMapper">
+    <select id="listAnotherId" resultType="Long">
+        select role_id_a from role_repulsion where role_id_b=#{roleId}
+        union
+        select role_id_b from role_repulsion where role_id_a=#{roleId}
+    </select>
+
+    <select id="countRoleId" resultType="int">
+        select count(*) from role_repulsion where role_id_a=#{roleIdB} and role_id_b=#{roleIdA}
+        union
+        select count(*) from role_repulsion where role_id_a=#{roleIdA} and role_id_b=#{roleIdB}
+    </select>
+
+    <select id="add">
+        insert into role_repulsion (role_id_a, role_id_b, remark)
+        values(#{roleIdA}, #{roleIdB}, #{remark}),(#{roleIdB}, #{roleIdA}, #{remark});
+    </select>
+
+    <select id="getOne" resultType="course.linkflower.link.system.vo.rolerepulsion.RoleRepulsionVo">
+        select * from role_repulsion where id=#{id}
+    </select>
+
+    <select id="deleteByRoleIds">
+        <foreach collection="roleIdDtos" item="roleIdDto">
+            delete role_repulsion where
+            (role_id_a=#{roleIdDto.roleIdA} and role_id_b=#{roleIdDto.roleIdB})
+            or (role_id_a=#{roleIdDto.roleIdB} and role_id_b=#{roleIdDto.roleIdA})
+        </foreach>
+    </select>
+
+    <delete id="deleteByOneRoleId">
+        delete from role_repulsion
+        where role_id_a=#{roleId} or role_id_b=#{roleId}
+    </delete>
+
+    <delete id="deleteByOneRoleIds">
+        delete from role_repulsion
+        where role_id_a in
+        <foreach collection="roleIds" item="roleId" open="(" close=")" separator=",">
+            #{roleId}
+        </foreach>
+        or role_id_b in
+        <foreach collection="roleIds" separator="," close=")" open="(" item="roleId">
+            #{roleId}
+        </foreach>
+    </delete>
+</mapper>

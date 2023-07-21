@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="course.linkflower.link.system.dao.RoleMapper">
+    <select id="countCode" resultType="int">
+        select count(*) from role where `code`=#{code} limit 1
+    </select>
+
+    <select id="countLast" resultType="Integer">
+        select ordering from role where type=#{type}order by ordering desc limit 1
+    </select>
+
+    <insert id="add" useGeneratedKeys="true" parameterType="course.linkflower.link.system.model.Role" keyProperty="id">
+        insert into role(name, type, code, ordering)
+        values(#{name},#{type},#{code},#{ordering})
+    </insert>
+
+    <select id="getOne" resultType="course.linkflower.link.system.model.Role">
+        select * from role where id=#{id} limit 1
+    </select>
+
+    <delete id="deleteByIds">
+        delete r.*, ur.*, rug.*, rpg.*, rp.* from role r
+        left join user_role ur on r.id=ur.role_id
+        left join role_user_group rug on r.id=rug.role_id
+        left join role_privilege_group rpg on r.id=rpg.role_id
+        left join role_privilege rp on r.id=rp.role_id
+        where r.id in
+        <foreach collection="ids" item="id" separator="," close=")" open="(">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteById">
+        delete r.*, ur.*, rug.*, rpg.*, rp.* from role r
+        left join user_role ur on r.id=ur.role_id
+        left join role_user_group rug on r.id=rug.role_id
+        left join role_privilege_group rpg on r.id=rpg.role_id
+        left join role_privilege rp on r.id=rp.role_id
+        where r.id=#{id}
+    </delete>
+
+    <select id="countCodeDiffId" resultType="int">
+        select count(*) from role where `code`=#{code} and id!=#{id}
+    </select>
+
+    <update id="update">
+        update role
+        <set>
+            <if test="name!=null and name!=''">name=#{name},</if>
+            <if test="code and code!=''">code=#{code},</if>
+            <if test="ordering and ordering!=''">ordering=#{ordering},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="search" resultType="course.linkflower.link.system.vo.role.RoleVo">
+        select * from role
+        <trim prefix="where">
+                type=#{type}
+            <if test="searchKey and searchKey!=''">and (name like '%${searchKey}%' or
+                code like '%${searchKey}%')</if>
+        </trim>
+        limit #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="listInfo" resultType="course.linkflower.link.system.vo.role.RoleInfoVo">
+        select id, name, code from role where id in
+        <foreach collection="ids" item="id" separator="," close=")" open="(">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="countTotal" resultType="int">
+        select count(*) from role
+        <trim prefix="where">
+            type=#{type}
+            <if test="searchKey and searchKey!=''">and (name like '%${searchKey}%' or
+                code like '%${searchKey}%')</if>
+        </trim>
+    </select>
+</mapper>

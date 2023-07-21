@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.oneframework.house.dao.HouseDictionaryMapper">
+    <select id="getById" resultType="course.linkflower.link.oneframework.house.model.HouseDictionary">
+        select * from house_dictionary where id=#{id}
+    </select>
+    <select id="ListByIds" resultType="course.linkflower.link.oneframework.house.model.HouseDictionary">
+        select * from house_dictionary where id in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <insert id="save" parameterType="course.linkflower.link.oneframework.house.model.HouseDictionary" useGeneratedKeys="true" keyProperty="id">
+        insert into house_dictionary (`type`, `key`, `value` ,`sort_value`)
+        values(#{type},#{key},#{value} ,#{sortValue})
+    </insert>
+
+    <delete id="delete">
+        delete from house_dictionary where `id`=#{id}
+    </delete>
+
+    <update id="update" parameterType="course.linkflower.link.oneframework.house.model.HouseDictionary" useGeneratedKeys="true">
+        update house_dictionary set `type`=#{type},`key`=#{key},`value` = #{value}, `sort_value` = #{sortValue} where id = #{id}
+    </update>
+
+    <select id="lastSortValueByType" resultType="int">
+        select count(sort_value) from house_dictionary where `type` = #{type}
+    </select>
+    <select id="getLastKey" resultType="String">
+        select `key` from house_dictionary order by `key` desc limit 1;
+    </select>
+
+    <select id="countByTypeKey" resultType="int">
+        select count(*) from house_dictionary where `type` = #{type}  and `key` = #{key};
+    </select>
+
+    <select id="countByTypeKeyId" resultType="int">
+        select count(*) from house_dictionary where `type` = #{type}  and `key` = #{key} and id != #{id};
+    </select>
+
+    <select id="listDictionaryByKey" resultType="course.linkflower.link.oneframework.house.model.HouseDictionary">
+        select * from house_dictionary where `key` = #{key} order by sort_value limit #{count}
+    </select>
+
+    <select id="searchHouseDictionaryByType" resultType="course.linkflower.link.oneframework.house.model.HouseDictionary">
+        select `key`,value,type from house_dictionary where `type` = #{type}
+    </select>
+
+    <delete id="deleteAll" >
+        delete  from house_dictionary where id in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    <select id="search" resultType="course.linkflower.link.oneframework.house.vo.housedictionary.HouseDictionaryVo" parameterType="course.linkflower.link.oneframework.house.dto.housedevicetype.HousePageDto">
+        select * from house_dictionary
+        <where>
+            <if test="type != null and type != ''">
+                AND type = #{type}
+            </if>
+            <trim prefix="AND (" suffix=")" prefixOverrides="OR" >
+                <if test="searchKey != null and searchKey != ''">OR `key` like '%${searchKey}%'</if>
+                <if test="searchKey != null and searchKey != ''">OR `value` like '%${searchKey}%'</if>
+            </trim>
+        </where>
+        order by id limit #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="searchByType" resultType="course.linkflower.link.oneframework.house.vo.housedictionary.HouseDictionaryVo" parameterType="course.linkflower.link.oneframework.house.dto.housedevicetype.HousePageDto">
+        select * from house_dictionary where `type` = #{type} order by id limit #{pageStart}, #{pageSize}
+    </select>
+    <select id="countAll" resultType="long">
+        select count(*) from house_dictionary
+    </select>
+    <select id="getAllType" resultType="course.linkflower.link.oneframework.house.vo.housedictionary.HouseDictionaryTypeVo" >
+        select Distinct `type` from house_dictionary
+    </select>
+
+    <select id="listByType" resultType="course.linkflower.link.oneframework.house.model.HouseDictionary" >
+        select * from house_dictionary where type = #{type}
+    </select>
+    <select id="getId" resultType="long">
+        select id from house_dictionary order by id desc
+    </select>
+    <select id="listAll" resultType="course.linkflower.link.oneframework.house.vo.housedictionary.HouseDictionaryVo">
+        select * from house_dictionary order by id limit #{pageStart}, #{pageSize}
+    </select>
+</mapper>

@@ -1,0 +1,19 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>course.linkflower.link</groupId>
+        <artifactId>one-framework</artifactId>
+        <version>1.1.0</version>
+    </parent>
+    <version>1.0.0</version>
+    <artifactId>commons</artifactId>
+    <description>公用中心</description>
+    <packaging>pom</packaging>
+    <modules>
+        <module>common-core</module>
+        <module>common-db-spring-boot-starter</module>
+        <module>common-spring-boot-starter</module>
+        <module>common-redis-spring-boot-starter</module>
+    </modules>
+</project>

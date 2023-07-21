@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.system.dao.UserUserGroupMapper">
+    <select id="userGroupIds" resultType="Long">
+        select ug.id from user_group ug
+        left join user_user_group uug on ug.id=uug.user_group_id
+        where uug.user_id=#{userId}
+    </select>
+</mapper>

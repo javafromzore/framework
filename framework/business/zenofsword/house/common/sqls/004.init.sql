@@ -1,0 +1,31 @@
+-- `five-eight`.rent_house_info definition
+
+CREATE TABLE `rent_house_info` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) NOT NULL,
+  `rent` int DEFAULT NULL,
+  `house_size` decimal(7,2) DEFAULT NULL,
+  `client_id` bigint unsigned DEFAULT NULL,
+  `agent_id` bigint unsigned DEFAULT NULL,
+  `video` varchar(100) DEFAULT NULL,
+  `picture` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `bedroom` tinyint unsigned DEFAULT '0',
+  `livingroom` tinyint unsigned DEFAULT '0',
+  `washroom` tinyint unsigned DEFAULT '0',
+  `level` tinyint DEFAULT '0',
+  `status` tinyint DEFAULT '0',
+  `house_description` text,
+  `property_price` decimal(7,2) DEFAULT '0.00',
+  `community_info_id` bigint unsigned DEFAULT NULL,
+  `deposittype_id` bigint unsigned DEFAULT NULL,
+  `commission_id` bigint unsigned DEFAULT NULL,
+  `renthousetype_id` bigint unsigned DEFAULT NULL,
+  `decoratetype_id` bigint unsigned DEFAULT NULL,
+  `orientation_id` bigint unsigned DEFAULT NULL,
+  `storey_id` bigint unsigned DEFAULT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `storey` tinyint unsigned DEFAULT '0',
+  `bedroom_type_id` bigint unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `rent_house_info_title_IDX` (`title`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

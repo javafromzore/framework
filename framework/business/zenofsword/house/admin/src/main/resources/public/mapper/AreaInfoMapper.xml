@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.oneframework.house.dao.AreaInfoMapper">
+    <select id="getById" resultType="course.linkflower.link.oneframework.house.model.AreaInfo">
+        select * from area_info where id=#{id}
+    </select>
+
+    <insert id="save" parameterType="course.linkflower.link.oneframework.house.model.AreaInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into area_info (parent_id, level,name,code,`type`,address)
+        values(#{parentId},#{level},#{name},#{code},#{key},#{address})
+    </insert>
+
+    <delete id="delete">
+        delete from area_info where id=#{id}
+    </delete>
+    <update id="update" parameterType="course.linkflower.link.oneframework.house.model.AreaInfo" useGeneratedKeys="true">
+        update area_info set `parent_id`=#{parentId},`level` = #{level},`name`=#{name},
+        `code` = #{code} ,`type` = #{key},`address` = #{address} where id = #{id}
+    </update>
+    <select id="listByIds" resultType="course.linkflower.link.oneframework.house.vo.areainfo.AreaTypeVo">
+        select * from area_info where id in
+        <foreach item="item" collection="ids" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="listByHouseId" resultType="course.linkflower.link.oneframework.house.model.AreaInfo">
+        SELECT * FROM area_info WHERE id in (SELECT area_info_id  FROM area_product_details apd WHERE target_id = #{id} and target_type=#{type})
+    </select>
+</mapper>

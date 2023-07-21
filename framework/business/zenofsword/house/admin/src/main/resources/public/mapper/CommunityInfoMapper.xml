@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.oneframework.house.dao.CommunityInfoMapper">
+    <select id="getById" resultType="course.linkflower.link.oneframework.house.model.CommunityInfo">
+        select * from community_info where id=#{id}
+    </select>
+
+    <insert id="save" parameterType="course.linkflower.link.oneframework.house.model.CommunityInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into community_info (build_years, name,property_company,business_area)
+        values(#{buildYears},#{name},#{propertyCompany},#{businessArea})
+    </insert>
+
+    <delete id="delete">
+        delete from community_info where id=#{id}
+    </delete>
+    <update id="update" parameterType="course.linkflower.link.oneframework.house.model.CommunityInfo" useGeneratedKeys="true">
+        update community_info set `build_years`=#{buildYears},`name` = #{name},`property_company`=#{propertyCompany},`business_area` = #{businessArea}  where id = #{id}
+    </update>
+</mapper>

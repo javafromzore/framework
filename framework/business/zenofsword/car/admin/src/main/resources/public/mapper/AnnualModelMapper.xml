@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.oneframework.car.dao.AnnualModelMapper">
+    <insert id="add" parameterType="course.linkflower.link.oneframework.model.AnnualModel" keyProperty="id" useGeneratedKeys="true">
+        insert into annual_model(year, series_id, ordering)
+        values(#{year}, #{seriesId}, #{ordering})
+    </insert>
+
+    <delete id="deleteByIds">
+        delete from annual_model where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteById">
+        delete from annual_model where id=#{id}
+    </delete>
+
+    <update id="update">
+        update annual_model
+        <set>
+            <if test="year != null and year != ''">year=#{year},</if>
+            <if test="seriesId != null and seriesId != ''">series_id=#{seriesId},</if>
+            <if test="ordering != null and ordering != ''">ordering=#{ordering},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="getById" resultType="course.linkflower.link.oneframework.model.AnnualModel">
+        select * from annual_model where id=#{id} limit 1
+    </select>
+
+    <select id="search" resultType="course.linkflower.link.oneframework.car.vo.annualmodel.AnnualModelVo">
+        select * from annual_model
+        <if test="seriesId != null and seriesId != ''">where series_id=#{seriesId}</if>
+        order by ordering
+        limit #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countAll" resultType="int">
+        select count(*) from annual_model
+        <if test="seriesId != null and seriesId != ''">where series_id=#{seriesId}</if>
+    </select>
+
+    <select id="countSeriesIdYear" resultType="int">
+        select count(*) from annual_model where series_id=#{seriesId} and year=#{year} limit 1
+    </select>
+    
+    <select id="lastOrdering" resultType="Integer">
+        select ordering from annual_model order by ordering desc limit 1
+    </select>
+
+    <select id="countSeriesIdYearDiffId" resultType="int">
+        select count(*) from annual_model where series_id=#{seriesId} and year=#{year} and id!=#{id} limit 1
+    </select>
+
+    <select id="listByIds" resultType="course.linkflower.link.oneframework.model.AnnualModel">
+        select * from annual_model where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

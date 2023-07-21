@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.oneframework.car.dao.ModificationMapper">
+    <insert id="add" parameterType="course.linkflower.link.oneframework.model.Modification" useGeneratedKeys="true" keyProperty="id">
+        insert into modification(used_car_id, name, value, remark, value_type, introduction,ordering, value_str)
+        values(#{usedCarId},#{name},#{value},#{remark},#{valueType},#{introduction},#{ordering},#{valueStr})
+    </insert>
+
+    <delete id="deleteById">
+        delete from modification where id=#{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        delete from modification where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update modification
+        <set>
+            <if test="usedCarId!=null and usedCarId!=''">used_car_id=#{usedCarId},</if>
+            <if test="name!=null and name!=''">name=#{name},</if>
+            <if test="value!=null and value!=''">value=#{value},</if>
+            <if test="remark!=null and remark!=''">remark=#{remark},</if>
+            <if test="valueType!=null and valueType!=''">value_type=#{valueType},</if>
+            <if test="introduction!=null and introduction!=''">introduction=#{introduction},</if>
+            <if test="valueStr!=null and valueStr!=''">value_str=#{valueStr}</if>
+            <if test="ordering!=null and ordering!=''">ordering=#{ordering}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="getById" resultType="course.linkflower.link.oneframework.model.Modification">
+        select * from modification where id=#{id}
+    </select>
+
+    <select id="search" resultType="course.linkflower.link.oneframework.car.vo.modification.ModificationVo">
+        select * from modification
+        <if test="searchKey!=null">where name=#{searchKey}</if>
+        limit #{startCount}, #{pageSize}
+    </select>
+
+    <select id="countAll" resultType="int">
+        select count(*) from modification
+        <if test="searchKey!=null">where name=#{searchKey}</if>
+    </select>
+</mapper>

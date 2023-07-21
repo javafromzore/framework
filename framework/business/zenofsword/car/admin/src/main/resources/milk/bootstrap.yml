@@ -1,0 +1,11 @@
+server:
+  port: 7009
+
+spring:
+  application:
+    name: zenofsword.car
+    cloud:
+      nacos:
+        config:
+          server-addr:mini.com:8848
+          namespace:dev

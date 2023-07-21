@@ -1,0 +1,10 @@
+server:
+  port: 7016
+login.interceptor.headName : authorization
+login.interceptor.loginToken : login:token
+
+
+
+spring:
+  application:
+    name: user-center

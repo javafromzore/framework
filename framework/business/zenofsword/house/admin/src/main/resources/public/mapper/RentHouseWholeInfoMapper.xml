@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.oneframework.house.dao.RentHouseWholeInfoMapper">
+    <select id="getRentHouseInfoById" resultType="course.linkflower.link.oneframework.house.model.RentHouseInfo">
+        select * from rent_house_info where id=#{id}
+    </select>
+    <select id="searchHouseDictionaryByIds" resultType="course.linkflower.link.oneframework.house.model.HouseDictionary">
+        select * from house_dictionary where id in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="getAreaInfoId" resultType="course.linkflower.link.oneframework.house.model.AreaProductDetails">
+        select * from area_product_details where target_id =#{id}
+    </select>
+    <select id="searchAreaInfoByIds" resultType="course.linkflower.link.oneframework.house.model.AreaInfo">
+        select * from area_info where id in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="getCommunityInfoById" resultType="course.linkflower.link.oneframework.house.model.CommunityInfo">
+        select * from community_info where id =#{id}
+    </select>
+    <select id="getCommissionById" resultType="course.linkflower.link.oneframework.house.model.Commission">
+        select * from commission where id =#{id}
+    </select>
+
+    <select id="getHouseDeviceId" resultType="course.linkflower.link.oneframework.house.model.HouseDevice">
+        select * from house_device where rent_house_info_id =#{id}
+    </select>
+    <select id="searchHouseDeviceTypeByIds" resultType="course.linkflower.link.oneframework.house.model.HouseDeviceType">
+        select * from house_device_type where id in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="getHouseHighlightId" resultType="course.linkflower.link.oneframework.house.model.HouseHighlight">
+        select * from house_highlight where rent_house_info_id =#{id}
+    </select>
+    <select id="searchHouseHightlightInfoByIds" resultType="course.linkflower.link.oneframework.house.model.HouseHightlightInfo">
+        select * from house_highlight_info where id in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="getRentHouseRequestId" resultType="course.linkflower.link.oneframework.house.model.RentHouseRequest">
+        select * from rent_house_request where rent_house_info_id =#{id}
+    </select>
+    <select id="searchRentHouseRequestInfoByIds" resultType="course.linkflower.link.oneframework.house.model.RentHouseRequestInfo">
+        select * from rent_house_request_info where id in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

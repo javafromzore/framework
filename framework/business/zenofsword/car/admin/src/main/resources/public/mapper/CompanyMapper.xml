@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.oneframework.car.dao.CompanyMapper">
+    <insert id="add" parameterType="course.linkflower.link.oneframework.model.Company" keyProperty="id" useGeneratedKeys="true">
+        insert into company(name, address, email, phone, icon)
+        values(#{name},#{address},#{email},#{phone},#{icon})
+    </insert>
+
+    <update id="update">
+        update company
+        <set><if test="name!=null and name!=''">name=#{name},</if>
+            <if test="address!=null and address!=''">address=#{address},</if>
+            <if test="email!=null and email!=''">email=#{email},</if>
+            <if test="phone!=null and phone!=''">phone=#{phone},</if>
+            <if test="icon!=null and icon!=''">icon=#{icon},</if></set>
+        where id=#{id}
+    </update>
+    
+    <select id="getById" resultType="course.linkflower.link.oneframework.model.Company">
+        select * from company where id=#{id} limit 1
+    </select>
+
+    <delete id="deleteById">
+        delete from company where id=#{id}
+    </delete>
+
+    <select id="countNameDiffId" resultType="int">
+        select  count(*)  from company where name=#{name} and id!=#{id} limit 1
+    </select>
+
+    <select id="countName" resultType="int">
+        select  count(*)  from company where name=#{name} limit 1
+    </select>
+
+    <select id="search" resultType="course.linkflower.link.oneframework.car.vo.company.CompanyVo">
+            select * from company
+        <trim prefix="WHERE" prefixOverrides="OR" >
+            <if test="searchKey != null and searchKey != ''">OR name like %$#{searchKey}%</if>
+            <if test="searchKey != null and searchKey != ''">OR email like %$#{searchKey}%</if>
+            <if test="searchKey != null and searchKey != ''">OR phone like %$#{searchKey}%</if>
+        </trim>
+        order by id limit #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countAll" resultType="int">
+        select count(*) from company
+        <trim prefix="WHERE" prefixOverrides="OR" >
+            <if test="searchKey != null and searchKey != ''">OR name like %$#{searchKey}%</if>
+            <if test="searchKey != null and searchKey != ''">OR email like %$#{searchKey}%</if>
+            <if test="searchKey != null and searchKey != ''">OR phone like %$#{searchKey}%</if>
+        </trim>
+    </select>
+
+    <select id="listInfoByIds" resultType="course.linkflower.link.oneframework.car.vo.company.CompanyInfoVo">
+        select name, id from company
+        where id in
+        <foreach collection="ids" item="id"  open="(" separator="," close=")" >
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="listIdBySearchKey" resultType="Long">
+        select id from company where name like '%${searchKey}%'
+    </select>
+
+    <delete id="deleteByIds">
+        delete from company where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,191 @@
+-- zenofsword_car.car_advantage definition
+
+CREATE TABLE `car_advantage` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `type_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '这个优势类型在car_dictionary中对应的key值。可选项：是、否、这个优势存在最大值、这个优势存在最小值',
+  `value` bigint unsigned DEFAULT NULL COMMENT '这个属性的值为最大值或者最小值',
+  `config_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '这个属性名称在car_map中的key值',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `car_advantage_config_key_IDX` (`config_key`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- zenofsword_car.car_config definition
+
+CREATE TABLE `car_config` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `config` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `remark` text COLLATE utf8mb4_general_ci,
+  `icon` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `value_type_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `introduction` text COLLATE utf8mb4_general_ci,
+  `ordering` bigint unsigned NOT NULL,
+  `type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '这是一个key',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `car_config_config_key_IDX` (`config`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- zenofsword_car.car_brand definition
+
+CREATE TABLE `car_brand` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `icon` varchar(100) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `car_company_id` bigint unsigned NOT NULL COMMENT '所属公司id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `car_brand_car_company_id_IDX` (`car_company_id`,`name`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- zenofsword_car.car_company definition
+
+CREATE TABLE `car_company` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `address` varchar(100) DEFAULT NULL COMMENT '集团地址',
+  `email` varchar(32) DEFAULT NULL,
+  `phone` varchar(32) DEFAULT NULL,
+  `icon` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `car_company_name_IDX` (`name`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- zenofsword_car.car_dictionary definition
+
+CREATE TABLE `car_dictionary` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `key` varchar(100) NOT NULL,
+  `type` varchar(100) NOT NULL,
+  `ordering` tinyint unsigned NOT NULL COMMENT '顺序',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `car_dictionary_key_IDX` (`key`,`type`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='车这一个业务的字典';
+-- zenofsword_car.car_for_config definition
+
+CREATE TABLE `car_for_config` (
+  `car_id` bigint unsigned NOT NULL,
+  `config_id` bigint unsigned NOT NULL,
+  `value` bigint unsigned DEFAULT NULL COMMENT '一个具体的值',
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `value_str` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '这辆车的配置的key',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- zenofsword_car.car_infor definition
+
+CREATE TABLE `car_infor` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `guide_price` bigint unsigned NOT NULL COMMENT '指导价,单位：元',
+  `car_pattern_id` bigint unsigned NOT NULL,
+  `quoted_price` bigint unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `car_infor_car_pattern_id_IDX` (`car_pattern_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='关于一种类型的车的信息（如江淮 瑞风M3 这就是一种车）';
+
+-- zenofsword_car.car_infor_config definition
+
+CREATE TABLE `car_infor_config` (
+  `car_infor_id` bigint unsigned NOT NULL,
+  `config_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '这个属性类型在car_dictionary中的key值',
+  `value` bigint unsigned DEFAULT NULL COMMENT '这个值的大小',
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `remark` text,
+  `icon` varchar(100) DEFAULT NULL,
+  `value_type_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '这个属性的值的类型在car_dictionary中对应的key值，可选项：key或者是数值',
+  `introduction` varchar(200) DEFAULT NULL COMMENT '对于这一项的介绍',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `car_config_un` (`car_infor_id`,`config_key`,`value`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- zenofsword_car.car_infor_photo definition
+
+CREATE TABLE `car_infor_photo` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `car_infor_id` bigint unsigned NOT NULL,
+  `photo` varchar(100) NOT NULL,
+  `ordering` tinyint unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- zenofsword_car.car_pattern definition
+
+CREATE TABLE `car_pattern` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `car_pattern` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '车型(是奥迪的x3?宝马的q5?)',
+  `car_brand_id` bigint unsigned NOT NULL,
+  `time_pattern` char(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '年份款式（如2020款）',
+  `pattern_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '款式key（运动？时尚？）',
+  PRIMARY KEY (`id`),
+  KEY `car_pattern_car_brand_id_IDX` (`car_brand_id`,`car_pattern`,`time_pattern`,`pattern_key`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='车的款式';
+
+-- zenofsword_car.dictionary definition
+
+CREATE TABLE `dictionary` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `value` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `ordering` tinyint unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `dictionary_type_IDX` (`type`,`key`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- zenofsword_car.used_car definition
+
+CREATE TABLE `used_car` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `car_infor_id` bigint unsigned NOT NULL,
+  `account_id` bigint unsigned NOT NULL COMMENT '账户id',
+  `post_date` date NOT NULL COMMENT '该二手车售卖信息发布时间',
+  `building_id` bigint unsigned NOT NULL COMMENT '该二手车地点建筑id（提车地点、试车地点等）',
+  `license_date` date NOT NULL COMMENT '首次上牌时间',
+  `contacted_name` varchar(50) NOT NULL COMMENT '联系人名字',
+  `contacted_phone` varchar(30) NOT NULL COMMENT '联系人电话',
+  `status` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '表示是否售卖，0代表未售卖，1代表已售卖',
+  `photo_count` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '照片数量',
+  `nature_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'dictionary中车辆性质的id',
+  `insurance_date` date DEFAULT NULL COMMENT '商业险到期时间',
+  `annual_inspection_date` date DEFAULT NULL COMMENT '年检到期时间',
+  `maintenance_key` varchar(32) NOT NULL COMMENT 'dictionary中维修保养种类key',
+  `compulsory_insurance_date` date DEFAULT NULL COMMENT '强险到期时间',
+  `vin` varchar(30) NOT NULL COMMENT '车辆vin码',
+  `description` text COMMENT '对于该车描述',
+  `transfer_fee_key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '过户费在car_dictionary中对应的类型（包含、不包含）',
+  `anxuan_key` varchar(32) NOT NULL COMMENT '安选在car_dictionary中对应的key（是，否）',
+  `price` bigint unsigned NOT NULL COMMENT '单位：元',
+  `mileage` bigint unsigned NOT NULL COMMENT '里程数（单位：万公里）',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='关于二手车';
+
+-- zenofsword_car.used_car_config definition
+
+CREATE TABLE `used_car_config` (
+  `used_car_id` bigint unsigned NOT NULL,
+  `config_key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '这个属性类型在car_map中的key值',
+  `value` bigint unsigned DEFAULT NULL COMMENT 'value的值表示属性的值在car_map中对应的key值，或者就是一个值',
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `remark` text,
+  `icon` varchar(100) DEFAULT NULL,
+  `value_type_key` varchar(100) NOT NULL COMMENT '这个属性的值的类型在car_dictionary中对应的key值，可选项：key或者是数值',
+  `introduction` varchar(200) DEFAULT NULL COMMENT '对于这一项的介绍',
+  `ordering` bigint unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `car_config_un` (`used_car_id`,`config_key`,`value`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- zenofsword_car.used_car_photo definition
+
+CREATE TABLE `used_car_photo` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `used_car_id` bigint unsigned NOT NULL,
+  `photo` varchar(100) NOT NULL,
+  `ordering` tinyint unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `car_version` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `car_id` binary(1) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `year` varchar(100) NOT NULL,
+  `ordering` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

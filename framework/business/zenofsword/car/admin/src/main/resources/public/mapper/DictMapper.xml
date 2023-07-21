@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.oneframework.car.dao.DictMapper">
+    <select id="countTypeKey" resultType="int">
+        select count(*) from dict where type=#{type} and key=#{key} limit 1
+    </select>
+
+    <insert id="add" parameterType="course.linkflower.link.oneframework.model.Dict" useGeneratedKeys="true" keyProperty="id">
+        insert into dict(value, `key`, type, ordering) values (#{value},#{key},#{type},#{ordering})
+    </insert>
+
+    <select id="getById" resultType="course.linkflower.link.oneframework.model.Dict">
+        select * from dict where id=#{id} limit 1
+    </select>
+
+    <select id="lastOrdering" resultType="Integer">
+        select ordering from dict where type=#{type} order by ordering desc limit 1
+    </select>
+
+    <delete id="deleteById">
+        delete from dict where id=#{id}
+    </delete>
+
+    <update id="update">
+        update dict
+        <set>
+            <if test="value!=null and value!=''">value=#{value},</if>
+            <if test="key!=null and key!=''">`key`=#{key},</if>
+            <if test="ordering!=null and ordering!=''">ordering=#{ordering}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="countTypeKeyDiffId" resultType="int">
+        select count(*) from dict where type=#{type} and key=#{key} and id!=#{id} limit 1
+    </select>
+
+    <select id="listByType" resultType="course.linkflower.link.oneframework.model.Dict">
+        select * from dict where type=#{type} order by ordering desc limit #{maxCount}
+    </select>
+
+    <select id="search" resultType="course.linkflower.link.oneframework.car.vo.dict.DictVo">
+        select * from dict  where type=#{type}
+        <if test="searchKey!=null and searchKey!=''">and searchKey=#{searchKey}</if>
+        order by ordering limit #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countAll" resultType="int">
+        select count(*) from dict where type=#{type}
+        <if test="searchKey!=null and searchKey!=''">and searchKey=#{searchKey}</if>
+    </select>
+</mapper>

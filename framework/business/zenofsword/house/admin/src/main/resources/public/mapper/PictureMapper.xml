@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.oneframework.house.dao.PictureMapper">
+    <select id="getById" resultType="course.linkflower.link.oneframework.house.model.Picture">
+        select * from picture where id=#{id}
+    </select>
+
+    <insert id="save" parameterType="course.linkflower.link.oneframework.house.model.Picture" useGeneratedKeys="true" keyProperty="id">
+        insert into picture (rent_house_info_id,`type`, name, url)
+        values(#{rentHouseInfoId},#{type},#{name},#{url})
+    </insert>
+
+    <delete id="delete">
+        delete from picture where id=#{id}
+    </delete>
+    <update id="update" parameterType="course.linkflower.link.oneframework.house.model.Picture" useGeneratedKeys="true">
+        update picture set `rent_house_info_id`=#{rentHouseInfoId},`type`=#{type},`name` = #{name}, `url` = #{url}where id = #{id}
+    </update>
+</mapper>

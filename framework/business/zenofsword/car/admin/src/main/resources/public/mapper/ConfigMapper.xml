@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.oneframework.car.dao.ConfigMapper">
+    <insert id="add" parameterType="course.linkflower.link.oneframework.model.Config" keyProperty="id" useGeneratedKeys="true">
+        insert into car_config(configconfig, remark, icon, value_type_key, introduction, ordering, type)
+        values(#{config}, #{remark}, #{icon}, #{valueTypeKey}, #{introduction}, #{ordering},#{type})
+    </insert>
+
+    <delete id="deleteByIds">
+        delete from car_config where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteById">
+        delete from car_config where id=#{id}
+    </delete>
+
+    <update id="update">
+        update car_config
+        <set>
+            <if test="config != null and config != ''">config=#{config},</if>
+            <if test="remark != null and remark != ''">remark=#{remark},</if>
+            <if test="icon != null and icon != ''">icon=#{icon},</if>
+            <if test="valueTypeKey != null and valueTypeKey != ''">value_type_key=#{valueTypeKey},</if>
+            <if test="introduction != null and introduction != ''">introduction=#{introduction},</if>
+            <if test="ordering != null and ordering != ''">ordering=#{ordering},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="getById" resultType="course.linkflower.link.oneframework.model.Config">
+        select * from car_config where id=#{id} limit 1
+    </select>
+
+    <select id="search" resultType="course.linkflower.link.oneframework.car.vo.config.ConfigVo">
+        select * from car_config where type=#{type}
+        <trim prefix="AND" prefixOverrides="OR" >
+            <if test="searchKey != null and searchKey != ''">OR config like '%${searchKey}%'</if>
+        </trim>
+        order by ordering
+        limit #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countAll" resultType="int">
+        select count(*) from car_config where type=#{type}
+            <if test="searchKey != null and searchKey != ''">OR config like '%${searchKey}%'</if>
+    </select>
+
+    <select id="countAttrib" resultType="int">
+        select count(*) from car_config where config=#{config} limit 1
+    </select>
+    
+    <select id="lastOrdering" resultType="Integer">
+        select ordering from car_config order by ordering desc limit 1
+    </select>
+
+    <select id="countAttribDiffId" resultType="int">
+        select count(*) from car_config where config=#{config} and id!=#{id} limit 1
+    </select>
+
+    <select id="listByIds" resultType="course.linkflower.link.oneframework.model.Config">
+        select * from car_config where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="detail" resultType="course.linkflower.link.oneframework.car.vo.config.ConfigDetailVo">
+        select cc.id as middleId, cc.value, cc.value_str, c.id, c.name, c.remark, c.icon, c.value_type, c.introduction, c.ordering,
+        c.car_type, c.config_type
+        from car_config cc left join config c on cc.config_id=c.id where
+        <foreach collection="relevanceDtos" separator="or" item="relevanceDto">
+            (cc.target_id=#{relevanceDto.targetId} and cc.type=#{relevanceDto.type})
+        </foreach>
+    </select>
+</mapper>

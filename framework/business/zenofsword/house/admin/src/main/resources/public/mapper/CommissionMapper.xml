@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.oneframework.house.dao.CommissionMapper">
+    <select id="getById" resultType="course.linkflower.link.oneframework.house.model.Commission">
+        select * from commission where id=#{id}
+    </select>
+
+    <insert id="save" parameterType="course.linkflower.link.oneframework.house.model.Commission" useGeneratedKeys="true" keyProperty="id">
+        insert into commission (`type`, `value`)
+        values(#{type},#{value})
+    </insert>
+
+    <delete id="delete">
+        delete from commission where id=#{id}
+    </delete>
+    <update id="update" parameterType="course.linkflower.link.oneframework.house.model.Commission" useGeneratedKeys="true">
+        update commission set `type`=#{type},`value` = #{value} where id = #{id}
+    </update>
+</mapper>

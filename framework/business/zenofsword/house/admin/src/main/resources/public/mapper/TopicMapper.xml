@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.oneframework.house.dao.TopicMapper">
+    <select id="getById" resultType="course.linkflower.link.oneframework.house.model.Topic">
+        select * from topic where id=#{id}
+    </select>
+
+    <select id="countByCode" resultType="int">
+        select count(*) from topic where code = #{code}
+    </select>
+
+    <select id="countByCodeAndId" resultType="int">
+        select count(*) from topic where code = #{code} and id != #{id}
+    </select>
+
+    <insert id="save" parameterType="course.linkflower.link.oneframework.house.model.Topic" useGeneratedKeys="true" keyProperty="id">
+        insert into topic(name, parent_id, parent1_id, column_type, is_hot, icon, sort_value)
+        values(#{name},#{parentId},#{parent1Id},#{columnType},#{isHot},#{icon},#{sortValue})
+    </insert>
+
+    <delete id="delete">
+        delete from topic where id=#{id}
+    </delete>
+
+    <update id="update" parameterType="course.linkflower.link.oneframework.house.model.Topic" useGeneratedKeys="true" keyProperty="id">
+        update topic set name=#{name},parent_id=#{parentId},parent1_id = #{parent1Id},column_type=#{columnType},
+        is_hot = #{isHot},sort_value = #{sortValue},icon = #{icon} where id = #{id}</update>
+    <select id="listByParentCode" resultType="course.linkflower.link.oneframework.house.vo.topic.TopicTreeVo">
+        SELECT
+        ID.level,
+        DATA.*
+        FROM
+        (SELECT
+        @ids AS _ids,
+        (SELECT
+        @ids := GROUP_CONCAT(id)
+        FROM
+        topic
+        WHERE FIND_IN_SET(parent_id, @ids)) AS cids,
+        @l := @l + 1 AS LEVEL
+        FROM
+        topic,
+        (SELECT
+        @ids := (select id from topic where code = #{code}),
+        @l := 0) b
+        WHERE @ids IS NOT NULL) id,
+        topic DATA
+        WHERE FIND_IN_SET(DATA.id, ID._ids)
+        ORDER BY LEVEL,
+        id ;
+    </select>
+</mapper>

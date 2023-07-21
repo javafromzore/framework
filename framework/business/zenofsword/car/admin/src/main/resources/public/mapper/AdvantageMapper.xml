@@ -1,0 +1,52 @@
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+            "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="course.linkflower.link.oneframework.car.dao.AdvantageMapper">
+    <select id="getById" resultType="course.linkflower.link.oneframework.model.Advantage">
+        select * from advantage where id=#{id} limit 1
+    </select>
+
+    <insert id="add" parameterType="course.linkflower.link.oneframework.model.Advantage" useGeneratedKeys="true" keyProperty="id">
+        insert into advantage(type, value, config_id, value_str, value_max)
+        values(#{type},#{value},#{configId},#{valueStr},#{valueMax})
+    </insert>
+
+    <select id="countConfigId" resultType="int">
+        select count(*) from advantage where config_id=#{configId} limit 1
+    </select>
+
+    <delete id="deleteById">
+        delete from advantage where id=#{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        delete from advantage where id in
+        <foreach collection="ids" item="id" separator="," close=")" open="(">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update advantage
+        <set>
+            <if test="value!=null and value!=''">value=#{value}</if>
+            <if test="configId and configId!=''">config_id=#{configId}</if>
+            <if test="valueStr and valueStr!=''">value_str=#{valueStr}</if>
+            <if test="valueMax and valueMax!=''">valueMax=#{valueMax}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="countConfigIdDiffId" resultType="int">
+        select count(*) from advantage where config_id=#{configId} and id!=#{id} limit 1
+    </select>
+    
+    <select id="search" resultType="course.linkflower.link.oneframework.car.vo.advantage.AdvantageVo">
+        select * from advantage where type=#{type}
+        order by id limit #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countAll" resultType="int">
+        select count(*) from advantage where type=#{type}
+    </select>
+</mapper>

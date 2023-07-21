@@ -1,0 +1,6 @@
+server:
+  port: 7009
+
+spring:
+  application:
+    name: zenofsword.car

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course.linkflower.link.oneframework.house.dao.RentHouseInfoMapper">
+    <select id="getById" resultType="course.linkflower.link.oneframework.house.model.RentHouseInfo">
+        select * from rent_house_info where id=#{id}
+    </select>
+
+    <insert id="save" parameterType="course.linkflower.link.oneframework.house.model.RentHouseInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into rent_house_info(client_id, agent_id, community_info_id, deposittype_id, commission_id, renthousetype_id,
+        decoratetype_id,orientation_id,storey_id,bedroom_type_id,property_price,house_size,bedroom,livingroom,washroom,rent,status,level,
+        house_description,picture,video,title,address)
+        values(#{clientId},#{agentId},#{communityInfoId},#{depositTypeId},#{commissionId},#{rentHouseTypeId},#{decorateTypeId},#{orientationId},
+        #{storeyId},#{bedroomTypeId}, #{propertyPrice},#{houseSize},#{bedroom},#{livingroom},#{washroom},#{rent},#{status},#{level},#{houseDescription},
+        #{picture},#{video},#{title},#{address})
+    </insert>
+
+    <delete id="delete">
+        delete from rent_house_info where id=#{id}
+    </delete>
+    <update id="update" parameterType="course.linkflower.link.oneframework.house.model.RentHouseInfo" useGeneratedKeys="true">
+        update rent_house_info set client_id=#{clientId},agent_id=#{agentId},community_info_id = #{communityInfoId},deposittype_id=#{depositTypeId},
+        commission_id = #{commissionId},renthousetype_id = #{rentHouseTypeId},decoratetype_id = #{decorateTypeId},
+        orientation_id=#{orientationId},storey_id=#{storeyId},property_price=#{propertyPrice},house_size=#{houseSize},bedroom=#{bedroom},
+        livingroom=#{livingroom},washroom=#{washroom},rent=#{rent},status=#{status},level=#{level},house_description=#{houseDescription},
+        picture=#{picture},video=#{video},title=#{title},address=#{address} where id = #{id}
+    </update>
+
+    <select id="saveDictionaryByIds" resultType="course.linkflower.link.oneframework.house.model.HouseDictionary">
+        select * from house_dictionary where id in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <delete id="deleteAll" >
+        delete  from rent_house_info where id in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    <select id="search" resultType="course.linkflower.link.oneframework.house.vo.renthouseinfo.ShortHouseInfoVo" parameterType="course.linkflower.link.oneframework.house.dto.housedevicetype.HousePageDto">
+        select * from rent_house_info
+        <where>
+            <trim prefix="AND (" suffix=")" prefixOverrides="OR" >
+                <if test="searchKey != null and searchKey != ''">OR `title` like '%${searchKey}%'</if>
+                <if test="searchKey != null and searchKey != ''">OR `rent` like '%${searchKey}%'</if>
+                <if test="searchKey != null and searchKey != ''">OR `level` like '%${searchKey}%'</if>
+                <if test="searchKey != null and searchKey != ''">OR `status` like '%${searchKey}%'</if>
+            </trim>
+        </where>
+        order by id limit #{pageStart}, #{pageSize}
+    </select>
+    <select id="countAll" resultType="long">
+        select count(*) from rent_house_info
+    </select>
+</mapper>

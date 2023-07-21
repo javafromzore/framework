@@ -1,0 +1,6 @@
+server:
+  port: 7008
+
+spring:
+  application:
+    name: zenofsword.car-biz

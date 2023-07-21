@@ -1,0 +1,6 @@
+server:
+  port: 7006
+
+spring:
+  application:
+    name: zenofsword.wallet-biz
